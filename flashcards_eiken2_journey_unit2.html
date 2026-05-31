@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2級 English Journey Unit 2 フラッシュカード</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: 'Helvetica Neue', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+    background: #1e1e24;
+    background-image: radial-gradient(circle at 20% 10%, #2a2a35 0%, #1a1a20 70%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  h1 {
+    color: #ff9a3c;
+    margin-bottom: 6px;
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .subtitle {
+    color: #c8c8d0;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 14px;
+  }
+  .progress {
+    color: #ffd28a;
+    font-size: 18px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .progress-bar {
+    width: 100%;
+    max-width: 600px;
+    height: 8px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff9a3c 0%, #6bcb77 100%);
+    transition: width 0.3s;
+    width: 5%;
+  }
+  .card {
+    width: 100%;
+    max-width: 600px;
+    min-height: 430px;
+    background: #fafafa;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 2px solid #ff9a3c;
+    margin-bottom: 18px;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .card.back {
+    background: #fff8ee;
+    border-color: #6bcb77;
+    justify-content: flex-start;
+    padding-top: 32px;
+  }
+  .face-front, .face-back {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .face-back { display: none; }
+  .card.back .face-front { display: none; }
+  .card.back .face-back { display: flex; }
+  .word {
+    font-size: 40px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    word-break: break-word;
+    text-align: center;
+    width: 100%;
+  }
+  .phonetic {
+    font-size: 20px;
+    color: #e67e22;
+    margin-bottom: 12px;
+    font-weight: 500;
+    text-align: center;
+    width: 100%;
+  }
+  .pos {
+    font-size: 13px;
+    color: #555;
+    font-style: italic;
+    background: #ececec;
+    padding: 4px 12px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+  .tap-hint {
+    margin-top: 18px;
+    font-size: 13px;
+    color: #888;
+    text-align: center;
+    width: 100%;
+  }
+  .meaning {
+    font-size: 28px;
+    color: #c0392b;
+    font-weight: 700;
+    margin-bottom: 18px;
+    width: 100%;
+    text-align: center;
+  }
+  .example-label {
+    font-size: 12px;
+    color: #27ae60;
+    margin-bottom: 6px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    width: 100%;
+    text-align: left;
+  }
+  .example {
+    font-size: 15px;
+    color: #2c3e50;
+    line-height: 1.6;
+    background: white;
+    padding: 14px;
+    border-radius: 10px;
+    border-left: 4px solid #27ae60;
+    margin-bottom: 10px;
+    text-align: left;
+    width: 100%;
+  }
+  .example-jp {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.5;
+    text-align: left;
+    width: 100%;
+    margin-bottom: 14px;
+    padding: 0 4px;
+  }
+  .controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 6px;
+    width: 100%;
+  }
+  .btn {
+    padding: 10px 22px;
+    border-radius: 22px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    border: 2px solid;
+    transition: background 0.2s;
+    font-family: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .btn-orange { background: #ff7e3c; color: #fff; border-color: #d35400; }
+  .btn-orange:active { background: #d35400; }
+  .btn-green { background: #27ae60; color: #fff; border-color: #1e8449; }
+  .btn-green:active { background: #1e8449; }
+  .btn-white { background: #fff; color: #1e1e24; border-color: #fff; }
+  .btn-white:active { background: #e0e0e0; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .speed-control {
+    background: white;
+    padding: 7px 14px;
+    border-radius: 22px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #2c3e50;
+    font-weight: 500;
+    border: 2px solid #d35400;
+  }
+  .speed-control select {
+    border: 2px solid #ff7e3c;
+    border-radius: 15px;
+    padding: 3px 8px;
+    font-size: 13px;
+    background: white;
+    cursor: pointer;
+    font-weight: 700;
+    color: #d35400;
+    outline: none;
+    font-family: inherit;
+  }
+  .nav-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .nav-btn {
+    padding: 12px 28px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 700;
+    border: 2px solid;
+    transition: background 0.2s;
+    font-family: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .list-toggle {
+    display: block;
+    margin: 18px auto 0;
+    padding: 9px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    background: #ff7e3c;
+    color: #fff;
+    border: 2px solid #d35400;
+    font-family: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .list-toggle:active { background: #d35400; }
+  .word-list {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 16px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 300px;
+    overflow-y: auto;
+    display: none;
+    border: 2px solid #ff9a3c;
+  }
+  .word-list.show { display: block; }
+  .list-item {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e8e8e8;
+    cursor: pointer;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 14px;
+  }
+  .list-item:active { background: #fff8ee; }
+  .list-item.current { background: #fff0e0; font-weight: 700; border-left: 4px solid #ff7e3c; }
+  .list-num { color: #d35400; min-width: 28px; font-weight: 700; }
+  .list-word { flex: 1; color: #2c3e50; }
+  .list-meaning { color: #1e8449; font-size: 13px; font-weight: 500; }
+  
+  @media (max-width: 480px) {
+    .word { font-size: 32px; }
+    .meaning { font-size: 22px; }
+    .example { font-size: 14px; }
+    .nav-btn { padding: 10px 20px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+  <h1>2級 English Journey Unit 2</h1>
+  <div class="subtitle">The Rapid Growth of AI より 重要単語・熟語45選</div>
+  
+  <div class="progress" id="progress">1 / 45</div>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  
+  <div class="card" id="card">
+    <div class="face-front">
+      <div class="word" id="word"></div>
+      <div class="phonetic" id="phonetic"></div>
+      <div class="pos" id="pos"></div>
+      <div class="controls">
+        <button type="button" class="btn btn-orange" id="playWord">🔊 単語を再生</button>
+        <span class="speed-control">速度
+          <select id="speedSelect">
+            <option value="0.5">0.5x</option>
+            <option value="0.75">0.75x</option>
+            <option value="1.0" selected>1.0x</option>
+            <option value="1.25">1.25x</option>
+            <option value="1.5">1.5x</option>
+          </select>
+        </span>
+      </div>
+      <div class="tap-hint">👆 タップで意味を表示</div>
+    </div>
+    <div class="face-back">
+      <div class="meaning" id="meaning"></div>
+      <div class="example-label">📖 本文での使用例</div>
+      <div class="example" id="example"></div>
+      <div class="example-jp" id="exampleJp"></div>
+      <div class="controls">
+        <button type="button" class="btn btn-green" id="playExample">🔊 例文を再生</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="nav-controls">
+    <button type="button" class="nav-btn btn-white" id="prevBtn">← 前へ</button>
+    <button type="button" class="nav-btn btn-orange" id="shuffleBtn">🔀 シャッフル</button>
+    <button type="button" class="nav-btn btn-green" id="resetBtn">🔄 リセット</button>
+    <button type="button" class="nav-btn btn-white" id="nextBtn">次へ →</button>
+  </div>
+  
+  <button type="button" class="list-toggle" id="listToggle">📋 単語一覧を表示</button>
+  
+  <div class="word-list" id="wordList"></div>
+
+<script>
+(function() {
+  var original = [
+    { word: "artificial intelligence", phonetic: "/ˌɑːrtɪˈfɪʃəl ɪnˈtelɪdʒəns/", pos: "名詞句 (noun phrase)", meaning: "人工知能 (AI)", example: "Artificial intelligence, or AI, has developed at an amazing speed.", exampleJp: "人工知能、つまりAIは驚くべきスピードで発展してきた。" },
+    { word: "although", phonetic: "/ɔːlˈðoʊ/", pos: "接続詞 (conjunction)", meaning: "〜だけれども、〜にもかかわらず", example: "Although AI technology has existed for many years, recent improvements have made it much more useful.", exampleJp: "AI技術は長年存在していたが、最近の改善によりはるかに有用になった。" },
+    { word: "exist", phonetic: "/ɪɡˈzɪst/", pos: "動詞 (verb)", meaning: "存在する", example: "AI technology has existed for many years.", exampleJp: "AI技術は長年存在してきた。" },
+    { word: "improvement", phonetic: "/ɪmˈpruːvmənt/", pos: "名詞 (noun)", meaning: "改善、向上", example: "Recent improvements in computing power have made AI much more useful.", exampleJp: "近年の計算能力の向上によりAIははるかに有用になった。" },
+    { word: "computing power", phonetic: "/kəmˈpjuːtɪŋ ˈpaʊər/", pos: "名詞句 (noun phrase)", meaning: "計算能力、処理能力", example: "Recent improvements in computing power have made AI more useful.", exampleJp: "近年の計算能力の向上によりAIはより有用になった。" },
+    { word: "data processing", phonetic: "/ˈdeɪtə ˈprɑːsesɪŋ/", pos: "名詞句 (noun phrase)", meaning: "データ処理", example: "Improvements in data processing have made AI much more useful.", exampleJp: "データ処理の改善によりAIははるかに有用になった。" },
+    { word: "everyday life", phonetic: "/ˈevriˌdeɪ laɪf/", pos: "名詞句 (noun phrase)", meaning: "日常生活", example: "AI has become much more useful in everyday life.", exampleJp: "AIは日常生活においてはるかに有用になった。" },
+    { word: "no longer", phonetic: "/noʊ ˈlɔːŋɡər/", pos: "熟語 (phrase)", meaning: "もはや〜ない", example: "Today, AI is no longer something found only in science fiction movies.", exampleJp: "今日、AIはもはやSF映画の中だけのものではない。" },
+    { word: "greatly", phonetic: "/ˈɡreɪtli/", pos: "副詞 (adverb)", meaning: "大いに、非常に", example: "One area that has changed greatly because of AI is communication.", exampleJp: "AIによって大きく変わった分野の一つはコミュニケーションだ。" },
+    { word: "translation", phonetic: "/trænzˈleɪʃən/", pos: "名詞 (noun)", meaning: "翻訳", example: "Translation tools can now quickly change one language into another.", exampleJp: "翻訳ツールは今やある言語を別の言語にすばやく変換できる。" },
+    { word: "allow", phonetic: "/əˈlaʊ/", pos: "動詞 (verb)", meaning: "許可する、可能にする", example: "Translation tools allow people from different countries to understand each other.", exampleJp: "翻訳ツールにより、異なる国の人々がお互いを理解することが可能になる。" },
+    { word: "organize", phonetic: "/ˈɔːrɡənaɪz/", pos: "動詞 (verb)", meaning: "整理する、まとめる", example: "AI helps people check grammar, organize ideas, and create documents.", exampleJp: "AIは人々が文法を確認し、アイデアを整理し、文書を作成するのを助ける。" },
+    { word: "document", phonetic: "/ˈdɑːkjumənt/", pos: "名詞 (noun)", meaning: "文書、書類", example: "AI helps people create documents.", exampleJp: "AIは人々が文書を作成するのを助ける。" },
+    { word: "as a result", phonetic: "/æz ə rɪˈzʌlt/", pos: "熟語 (phrase)", meaning: "結果として、その結果", example: "As a result, communication has become faster and more convenient than before.", exampleJp: "結果として、コミュニケーションは以前よりも速く便利になった。" },
+    { word: "influence", phonetic: "/ˈɪnfluəns/", pos: "動詞 (verb)", meaning: "影響を与える", example: "Education is another field that has been influenced by AI.", exampleJp: "教育はAIによって影響を受けたもう一つの分野だ。" },
+    { word: "app", phonetic: "/æp/", pos: "名詞 (noun)", meaning: "アプリ、アプリケーション", example: "Some learning apps can adjust their lessons to match each student's level.", exampleJp: "一部の学習アプリは、各生徒のレベルに合わせて授業を調整できる。" },
+    { word: "adjust", phonetic: "/əˈdʒʌst/", pos: "動詞 (verb)", meaning: "調整する、合わせる", example: "Some learning apps can adjust their lessons to match each student's level.", exampleJp: "一部の学習アプリは各生徒のレベルに合わせて授業を調整できる。" },
+    { word: "match", phonetic: "/mætʃ/", pos: "動詞 (verb)", meaning: "合わせる、一致させる", example: "Apps can adjust their lessons to match each student's level.", exampleJp: "アプリは各生徒のレベルに合わせて授業を調整できる。" },
+    { word: "means", phonetic: "/miːnz/", pos: "動詞 (verb)", meaning: "意味する、〜ということだ", example: "This means students can study at their own pace.", exampleJp: "これは生徒が自分のペースで勉強できることを意味する。" },
+    { word: "immediate", phonetic: "/ɪˈmiːdiət/", pos: "形容詞 (adjective)", meaning: "即時の、すぐの", example: "Students can study at their own pace and receive immediate feedback.", exampleJp: "生徒は自分のペースで勉強し、即時のフィードバックを受けることができる。" },
+    { word: "feedback", phonetic: "/ˈfiːdbæk/", pos: "名詞 (noun)", meaning: "フィードバック、意見、感想", example: "Students can receive immediate feedback.", exampleJp: "生徒は即時のフィードバックを受け取ることができる。" },
+    { word: "prepare materials", phonetic: "/prɪˈper məˈtɪriəlz/", pos: "熟語 (phrase)", meaning: "教材を準備する", example: "Teachers can also use AI to prepare materials.", exampleJp: "教師もまた、教材を準備するためにAIを使うことができる。" },
+    { word: "extra", phonetic: "/ˈekstrə/", pos: "形容詞 (adjective)", meaning: "追加の、余分な", example: "Teachers can find ways to support students who need extra help.", exampleJp: "教師は追加のサポートが必要な生徒を支援する方法を見つけられる。" },
+    { word: "efficiency", phonetic: "/ɪˈfɪʃənsi/", pos: "名詞 (noun)", meaning: "効率、能率", example: "In business, AI is improving efficiency in many ways.", exampleJp: "ビジネスにおいて、AIは多くの面で効率を改善している。" },
+    { word: "in many ways", phonetic: "/ɪn ˈmeni weɪz/", pos: "熟語 (phrase)", meaning: "多くの方法で、様々な点で", example: "AI is improving efficiency in many ways.", exampleJp: "AIは多くの方法で効率を改善している。" },
+    { word: "analyze", phonetic: "/ˈænəlaɪz/", pos: "動詞 (verb)", meaning: "分析する", example: "Companies use AI to analyze customer data.", exampleJp: "企業はAIを使って顧客データを分析する。" },
+    { word: "predict", phonetic: "/prɪˈdɪkt/", pos: "動詞 (verb)", meaning: "予測する", example: "Companies use AI to predict sales trends.", exampleJp: "企業はAIを使って販売の傾向を予測する。" },
+    { word: "trend", phonetic: "/trend/", pos: "名詞 (noun)", meaning: "傾向、トレンド", example: "Companies use AI to predict sales trends.", exampleJp: "企業はAIを使って販売の傾向を予測する。" },
+    { word: "chatbot", phonetic: "/ˈtʃætbɑːt/", pos: "名詞 (noun)", meaning: "チャットボット (自動応答プログラム)", example: "Companies answer questions through chatbots.", exampleJp: "企業はチャットボットを通じて質問に答える。" },
+    { word: "accurately", phonetic: "/ˈækjərətli/", pos: "副詞 (adverb)", meaning: "正確に", example: "Robots controlled by AI can work quickly and accurately.", exampleJp: "AIによって制御されるロボットは素早く正確に作業できる。" },
+    { word: "reduce", phonetic: "/rɪˈduːs/", pos: "動詞 (verb)", meaning: "減らす、削減する", example: "These changes can save time and reduce costs for businesses.", exampleJp: "これらの変化は時間を節約し、企業のコストを削減できる。" },
+    { word: "rapid", phonetic: "/ˈræpɪd/", pos: "形容詞 (adjective)", meaning: "急速な、迅速な", example: "The rapid growth of AI also raises important questions.", exampleJp: "AIの急速な成長はまた重要な疑問も引き起こす。" },
+    { word: "growth", phonetic: "/ɡroʊθ/", pos: "名詞 (noun)", meaning: "成長、発展", example: "The rapid growth of AI raises important questions.", exampleJp: "AIの急速な成長は重要な疑問を引き起こす。" },
+    { word: "raise", phonetic: "/reɪz/", pos: "動詞 (verb)", meaning: "引き起こす、提起する", example: "The rapid growth of AI raises important questions.", exampleJp: "AIの急速な成長は重要な疑問を引き起こす。" },
+    { word: "replace", phonetic: "/rɪˈpleɪs/", pos: "動詞 (verb)", meaning: "置き換える、取って代わる", example: "Some people worry that AI may replace certain jobs in the future.", exampleJp: "一部の人々は、AIが将来特定の仕事に取って代わるのではないかと心配している。" },
+    { word: "certain", phonetic: "/ˈsɜːrtn/", pos: "形容詞 (adjective)", meaning: "特定の、ある", example: "AI may replace certain jobs in the future.", exampleJp: "AIは将来、特定の仕事に取って代わるかもしれない。" },
+    { word: "concerned about", phonetic: "/kənˈsɜːrnd əˈbaʊt/", pos: "熟語 (phrase)", meaning: "〜を心配している", example: "Others are concerned about privacy and the safe use of personal data.", exampleJp: "他の人々はプライバシーや個人データの安全な使用について心配している。" },
+    { word: "expert", phonetic: "/ˈekspɜːrt/", pos: "名詞 (noun)", meaning: "専門家", example: "Many experts say that AI should be developed carefully.", exampleJp: "多くの専門家がAIは慎重に開発されるべきだと言っている。" },
+    { word: "responsibly", phonetic: "/rɪˈspɑːnsəbli/", pos: "副詞 (adverb)", meaning: "責任を持って", example: "AI should be developed carefully and used responsibly.", exampleJp: "AIは慎重に開発され、責任を持って使われるべきだ。" },
+    { word: "many parts of", phonetic: "/ˈmeni pɑːrts əv/", pos: "熟語 (phrase)", meaning: "〜の多くの部分", example: "AI has already changed many parts of our lives.", exampleJp: "AIはすでに私たちの生活の多くの部分を変えてきた。" },
+    { word: "likely", phonetic: "/ˈlaɪkli/", pos: "副詞 (adverb)", meaning: "〜しそうである、おそらく", example: "Its influence will likely continue to grow.", exampleJp: "その影響はおそらく成長し続けるだろう。" },
+    { word: "continue to", phonetic: "/kənˈtɪnjuː tuː/", pos: "熟語 (phrase)", meaning: "〜し続ける", example: "Its influence will likely continue to grow.", exampleJp: "その影響はおそらく成長し続けるだろう。" },
+    { word: "wisely", phonetic: "/ˈwaɪzli/", pos: "副詞 (adverb)", meaning: "賢く、賢明に", example: "If people use this technology wisely, AI may create new opportunities.", exampleJp: "もし人々がこの技術を賢く使えば、AIは新しい機会を生み出すかもしれない。" },
+    { word: "opportunity", phonetic: "/ˌɑːpərˈtuːnəti/", pos: "名詞 (noun)", meaning: "機会、チャンス", example: "AI may create new opportunities.", exampleJp: "AIは新しい機会を生み出すかもしれない。" },
+    { word: "connected", phonetic: "/kəˈnektɪd/", pos: "形容詞 (adjective)", meaning: "つながった、関連した", example: "AI may make society more efficient and connected.", exampleJp: "AIは社会をより効率的でつながったものにするかもしれない。" }
+  ];
+
+  var cards = original.slice();
+  var currentIndex = 0;
+  var speed = 1.0;
+  var englishVoice = null;
+
+  function initVoices() {
+    if (typeof speechSynthesis === 'undefined') return;
+    var voices = speechSynthesis.getVoices();
+    if (!voices || voices.length === 0) return;
+    englishVoice = null;
+    for (var i = 0; i < voices.length; i++) {
+      if (voices[i].lang === 'en-US' && voices[i].name.indexOf('Google') !== -1) {
+        englishVoice = voices[i];
+        return;
+      }
+    }
+    for (var j = 0; j < voices.length; j++) {
+      if (voices[j].lang === 'en-US') { englishVoice = voices[j]; return; }
+    }
+    for (var k = 0; k < voices.length; k++) {
+      if (voices[k].lang === 'en-GB') { englishVoice = voices[k]; return; }
+    }
+    for (var l = 0; l < voices.length; l++) {
+      if (voices[l].lang && voices[l].lang.indexOf('en') === 0) { englishVoice = voices[l]; return; }
+    }
+  }
+
+  if (typeof speechSynthesis !== 'undefined') {
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = initVoices;
+    }
+    initVoices();
+  }
+
+  function renderCard() {
+    var c = cards[currentIndex];
+    document.getElementById('word').textContent = c.word;
+    document.getElementById('phonetic').textContent = c.phonetic;
+    document.getElementById('pos').textContent = c.pos;
+    document.getElementById('meaning').textContent = c.meaning;
+    document.getElementById('example').textContent = c.example;
+    document.getElementById('exampleJp').textContent = c.exampleJp;
+    document.getElementById('progress').textContent = (currentIndex + 1) + ' / ' + cards.length;
+    document.getElementById('progressFill').style.width = Math.round(((currentIndex + 1) / cards.length) * 100) + '%';
+    document.getElementById('card').classList.remove('back');
+    document.getElementById('prevBtn').disabled = currentIndex === 0;
+    document.getElementById('nextBtn').disabled = currentIndex === cards.length - 1;
+    updateWordList();
+  }
+
+  function flipCard() {
+    document.getElementById('card').classList.toggle('back');
+  }
+
+  function nextCard() {
+    if (currentIndex < cards.length - 1) {
+      currentIndex++;
+      renderCard();
+    }
+  }
+
+  function prevCard() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      renderCard();
+    }
+  }
+
+  function speak(text) {
+    if (typeof speechSynthesis === 'undefined') {
+      alert('お使いのブラウザは音声再生に対応していません');
+      return;
+    }
+    try {
+      speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US';
+      u.rate = speed;
+      if (englishVoice) u.voice = englishVoice;
+      speechSynthesis.speak(u);
+    } catch (e) {
+      console.log('Speech error:', e);
+    }
+  }
+
+  function shuffle() {
+    for (var i = cards.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = cards[i];
+      cards[i] = cards[j];
+      cards[j] = tmp;
+    }
+    currentIndex = 0;
+    renderCard();
+  }
+
+  function resetCards() {
+    cards = original.slice();
+    currentIndex = 0;
+    renderCard();
+  }
+
+  function updateWordList() {
+    var list = document.getElementById('wordList');
+    var html = '';
+    for (var i = 0; i < cards.length; i++) {
+      html += '<div class="list-item' + (i === currentIndex ? ' current' : '') + '" data-index="' + i + '">';
+      html += '<span class="list-num">' + (i + 1) + '.</span>';
+      html += '<span class="list-word"></span>';
+      html += '<span class="list-meaning"></span>';
+      html += '</div>';
+    }
+    list.innerHTML = html;
+    var items = list.getElementsByClassName('list-item');
+    for (var k = 0; k < items.length; k++) {
+      items[k].getElementsByClassName('list-word')[0].textContent = cards[k].word;
+      items[k].getElementsByClassName('list-meaning')[0].textContent = cards[k].meaning;
+      (function(idx) {
+        items[idx].addEventListener('click', function() {
+          currentIndex = idx;
+          renderCard();
+        });
+      })(k);
+    }
+  }
+
+  document.getElementById('card').addEventListener('click', function(e) {
+    var target = e.target;
+    while (target && target !== this) {
+      if (target.classList && (target.classList.contains('controls') || target.tagName === 'BUTTON' || target.tagName === 'SELECT')) {
+        return;
+      }
+      target = target.parentNode;
+    }
+    flipCard();
+  });
+
+  document.getElementById('playWord').addEventListener('click', function(e) {
+    e.stopPropagation();
+    speak(cards[currentIndex].word);
+  });
+  document.getElementById('playExample').addEventListener('click', function(e) {
+    e.stopPropagation();
+    speak(cards[currentIndex].example);
+  });
+  document.getElementById('speedSelect').addEventListener('change', function() {
+    speed = parseFloat(this.value);
+  });
+  document.getElementById('speedSelect').addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+  document.getElementById('prevBtn').addEventListener('click', prevCard);
+  document.getElementById('nextBtn').addEventListener('click', nextCard);
+  document.getElementById('shuffleBtn').addEventListener('click', shuffle);
+  document.getElementById('resetBtn').addEventListener('click', resetCards);
+  document.getElementById('listToggle').addEventListener('click', function() {
+    document.getElementById('wordList').classList.toggle('show');
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight') nextCard();
+    else if (e.key === 'ArrowLeft') prevCard();
+    else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+  });
+
+  renderCard();
+})();
+</script>
+</body>
+</html>
